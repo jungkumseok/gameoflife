@@ -40,7 +40,7 @@ Include the gameoflife.js in the *head* of your html document
 
 <head>
   ...
-  <script src="http://src.jungkumseok.com/jks/conwaygameoflife.js"></script>
+  <script src="https://raw.githubusercontent.com/jungkumseok/gameoflife/master/gameoflife/src/conwaygameoflife.js"></script>
   
 </head>
 
