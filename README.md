@@ -5,7 +5,7 @@
 > One interacts with the Game of Life by creating an initial configuration and observing how it evolves or, for advanced players, by creating patterns with particular properties.
 > ...[Read more in Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 
-Check out the demo [HERE](http://www.jungkumseok.com/box/dev/svg/gameoflife_plugin/)
+Check out the demo [HERE](http://jungkumseok.github.io/gameoflife)
 
 ## Dependencies
 
@@ -34,7 +34,7 @@ Including this Game of Life widget is extremely simple.
 
 ### Step 1
 
-Include the gameoflife.js in the <head> of your html document
+Include the gameoflife.js in the *head* of your html document
 
 ```html
 
@@ -64,7 +64,7 @@ In your html, use the <game-of-life></game-of-life> tag
 
 #### Method 1b : using CSS class
 
-On your div element, use the css class 'game-of-life' 
+On your div element, use the css class *'game-of-life'* 
 
 ```html
 
@@ -76,7 +76,7 @@ On your div element, use the css class 'game-of-life'
 
 #### Method 2 : jQuery method
 
-In your Javascript, use the jQuery method $(element).GameOfLife()
+In your Javascript, use the jQuery method *$(element).GameOfLife()*
 
 ```html
 
@@ -93,7 +93,7 @@ In your Javascript, use the jQuery method $(element).GameOfLife()
 
 #### Method 3 : pure javascript
 
-In your Javascript, use the bindGameOfLife() method
+In your Javascript, use the *bindGameOfLife()* method
 
 ```html
 
@@ -107,6 +107,10 @@ In your Javascript, use the bindGameOfLife() method
 </body>
 
 ```
+
+### Step 3
+
+Enjoy :)
 
 
 ## Future Update Plans
