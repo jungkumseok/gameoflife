@@ -13,6 +13,10 @@ function svgelem(tag, parent){
 }
 
 //helper for generating x * y array
+//  in order to be able to use the array in format = array[x][y],
+//  the data is stored with the axes flipped:  eg.  [ 1  2  3 ]   stored as  [[1, 4, 7],
+//													[ 4  5  6 ]      ->       [2, 5, 8],
+//													[ 7  8  9 ]               [3, 6, 9]]
 function emptyGrid(x_count, y_count, fill){
 	var cells = [];
 	for (var x = 0 ; x < x_count ; x++){
@@ -29,6 +33,39 @@ function emptyGrid(x_count, y_count, fill){
 	}
 	return cells;
 }
+
+//GameOfLife Components
+//This method is overloaded
+function GOLComponent(name, arg1, arg2){
+	var self = this;
+	if (typeof name === 'string'){
+		self.name = name;
+		//if arg1 = x * y array
+		if (arg1 && !arg2 && arg1 instanceof Array && arg1.length > 0){
+			self.width = arg1.length;
+			self.height = arg1[0].length;
+			self.data = arg1;
+		}
+		//if arg1 = width, arg2 = height
+		else if (arg1 && arg2 && typeof arg1 === 'number' && typeof arg2 === 'number'){
+			self.width = arg1;
+			self.height = arg2;
+			self.data = emptyGrid(self.width, self.height, false);
+		}
+		else {
+			throw "You must provide either ( x * y 2d array ) or ( width, height ) to create a component";
+		}
+	}
+}
+
+var GOL_COMPONENT_BLINKER_H = new GOLComponent('Blinker - Horizontal', [[true],
+                                                                        [true],
+                                                                        [true]]);
+var GOL_COMPONENT_BLINKER_V = new GOLComponent('Blinker - Vertical', [[true, true, true]]);
+
+var GOL_COMPONENT_GLIDER_SM = new GOLComponent('Glider - Small', [[false, false, true],
+                                                                  [true, false, true],
+                                                                  [false,  true,  true]]);
 
 
 //Below are GameOfLife Functions
@@ -48,7 +85,7 @@ function bindGameOfLife(elem, options){
 		function ConwayController(){
 			var self = this;
 			
-			//helper: snap rectangle generator
+			//helper: svg rectangle generator
 			function boxFactory(x, y){
 	  			//this should be called only after self.cells[][] is defined.
 				var box = svgelem('rect', self.view);
@@ -74,6 +111,7 @@ function bindGameOfLife(elem, options){
 		  			};
 	  			return box
 	  		}
+			
 			//controls
 			var label_iteration = domelem('span'); $(label_iteration).text('0');
 			var input_fps = domelem('input'); input_fps.type = 'number'; input_fps.min = '0.25'; input_fps.max='30'; input_fps.step='0.25';
@@ -94,7 +132,10 @@ function bindGameOfLife(elem, options){
 				var preset_option_glider = domelem('option', select_preset); $(preset_option_glider).html('Gliders');
 					preset_option_glider.value = 'Gliders';
 			
-			//Snap instance
+			var select_component = domelem('select');
+			var btn_select_component = domelem('button'); $(btn_select_component).html("<i class='fa fa-check'></i> Use");
+			
+			//SVG instance
 			self.view = svgelem('svg');
 				$(self.view).attr({ width: 1000, height: 400 });
 			
@@ -111,9 +152,25 @@ function bindGameOfLife(elem, options){
 	  		self.y_count = Math.ceil(self.maxHeight / self.cellSize);
 	  		
 	  		self.cells = emptyGrid(self.x_count, self.y_count, false);
-	  		self.snap_cells = emptyGrid(self.x_count, self.y_count, boxFactory); //this should be called only after cells is defined.
+	  		self.svg_cells = emptyGrid(self.x_count, self.y_count, boxFactory); //this should be called only after cells is defined.
+	  		
+	  		self.available_components = [];
 			
+	  		//extra data functions (non-critical to Game of Life functionality)
+			//    eg. component loader
+			function load_available_components(){
+				//call this function just once
+				self.available_components = [ GOL_COMPONENT_BLINKER_H,
+				                              GOL_COMPONENT_BLINKER_V,
+				                              GOL_COMPONENT_GLIDER_SM ];
+				for (var i=0; i < self.available_components.length; i++){
+					$(select_component).append('<option value="'+i+'">'+self.available_components[i].name+'</option>');
+				}
+			}
+	  		
+	  		//Critical Functions
 	  		function count_state(){
+	  		//scan through cells and counts how many neighbors each cell has
 	  			var ncells = emptyGrid(self.x_count, self.y_count, 0);
 	  			var rx, ry;
 	  			for (var x = 0 ; x < self.x_count ; x++){
@@ -133,6 +190,7 @@ function bindGameOfLife(elem, options){
 	  		}
 	  		
 	  		function next_state(){
+	  		//apply game of life evolution rules and overwrites current state
 	  			var ncells = count_state()
 	  			for (var x = 0; x < self.x_count ; x++){
 	  				for (var y = 0; y < self.y_count; y ++){
@@ -146,30 +204,14 @@ function bindGameOfLife(elem, options){
 	  			$(label_iteration).text(self.iterationCount);
 	  		}
 	  	
-	  		function render_snap(){
+	  		function render_state(){
+	  		//render state by flipping colors of the cells
 	  			for (var x = 0 ; x < self.x_count ; x++){
 	  				for (var y = 0; y < self.y_count ; y++){
-	  					if (self.cells[x][y] === true) $(self.snap_cells[x][y]).attr({ fill: 'red', stroke: 'black', strokeWidth: 1 });
-	  					else $(self.snap_cells[x][y]).attr({ fill: 'white', stroke: 'black', strokeWidth: 1 });
+	  					if (self.cells[x][y] === true) $(self.svg_cells[x][y]).attr({ fill: 'red', stroke: 'black', strokeWidth: 1 });
+	  					else $(self.svg_cells[x][y]).attr({ fill: 'white', stroke: 'black', strokeWidth: 1 });
 	  				}
 	  			}
-	  		}
-	  		
-	  		function next(){
-	  			next_state();
-	  			render_snap();
-	  		}
-	  		
-	  		function play(){
-	  			if (!self.frame_player){
-	  				self.frame_player = setInterval(function(){
-		  				next();
-		  			}, self.interval)	
-	  			}
-	  		}
-	  		function stop(){
-	  			clearInterval(self.frame_player);
-	  			self.frame_player = null;
 	  		}
 	  		
 	  		//State functions
@@ -204,6 +246,38 @@ function bindGameOfLife(elem, options){
 	  			}
 	  		}
 	  		
+	  		//component placement
+	  		function place_component(component_index, x, y){
+	  			var component = self.available_components[component_index];
+	  			console.log(component);
+	  			var rx, ry;
+	  			for (var sx = x; sx < x + component.width; sx ++){
+	  				for (var sy = y; sy < y + component.height; sy ++){
+	  					rx = (sx < 0) ? ((self.x_count + sx) % self.x_count) : ( (sx >= self.x_count) ? ((sx - self.x_count) % self.x_count) : sx );
+		  				ry = (sy < 0) ? ((self.y_count + sy) % self.x_count) : ( (sy >= self.y_count) ? ((sy - self.y_count) % self.x_count) : sy );
+		  				console.log(rx+', '+ry)
+	  					self.cells[rx][ry] = component.data[sx-x][sy-y];
+	  				}
+	  			}
+	  		}
+	  		
+	  		//Control functions
+	  		function next(){
+	  			next_state();
+	  			render_state();
+	  		}
+	  		
+	  		function play(){
+	  			if (!self.frame_player){
+	  				self.frame_player = setInterval(function(){
+		  				next();
+		  			}, self.interval)	
+	  			}
+	  		}
+	  		function stop(){
+	  			clearInterval(self.frame_player);
+	  			self.frame_player = null;
+	  		}
 	  		
 	  		$(btn_next).on('click', function(){
 	  			next();
@@ -223,12 +297,12 @@ function bindGameOfLife(elem, options){
 	  		
 	  		$(btn_randomize).on('click', function(){
 	  			random_state();
-	  			render_snap();
+	  			render_state();
 	  		});
 	  		
 	  		$(btn_clear).on('click', function(){
 	  			clear_state();
-	  			render_snap();
+	  			render_state();
 	  		});
 	  		
 	  		$(btn_reset).on('click', function(){
@@ -239,12 +313,17 @@ function bindGameOfLife(elem, options){
 	  			$(input_cellsize).val(25);
 	  			$(input_fps).change();
 	  			$(input_cellsize).change();
-	  			render_snap();
+	  			render_state();
 	  		});
 	  		
 	  		$(select_preset).on('change', function(){
 	  			load_preset( $(this).val() );
-	  			render_snap();
+	  			render_state();
+	  		});
+	  		
+	  		$(btn_select_component).on('click', function(){
+	  			place_component( $(select_component).val() , 40, 16 );
+	  			render_state();
 	  		});
 	  		
 	  		$(input_fps).on('change', function(){
@@ -264,7 +343,7 @@ function bindGameOfLife(elem, options){
 	  		  		self.y_count = Math.ceil(self.maxHeight / self.cellSize);
 	  		  		
 	  		  		self.cells = emptyGrid(self.x_count, self.y_count, false);
-	  		  		self.snap_cells = emptyGrid(self.x_count, self.y_count, boxFactory); //this should be called only after cells is defined.
+	  		  		self.svg_cells = emptyGrid(self.x_count, self.y_count, boxFactory); //this should be called only after cells is defined.
 	  				
 	  			};
 	  		});
@@ -286,6 +365,8 @@ function bindGameOfLife(elem, options){
 			var					btn_g2 = domelem('span', body_col1);
 			var					ctrl_g4 = domelem('span', body_col1);
 			var						label_g4 = domelem('label', ctrl_g4); $(label_g4).text("Preset");
+			var					ctrl_g5 = domelem('span', body_col1);
+			var						label_g5 = domelem('label', ctrl_g5); $(label_g5).text("Component");
 			var				body_col2 = domelem('div', body_row);
 			
 			//attaching controllers
@@ -302,6 +383,8 @@ function bindGameOfLife(elem, options){
 			btn_g2.appendChild(btn_reset);
 			
 			ctrl_g4.appendChild(select_preset);
+			ctrl_g5.appendChild(select_component);
+			ctrl_g5.appendChild(btn_select_component);
 			
 			body_col2.appendChild(self.view);
 			
@@ -328,11 +411,16 @@ function bindGameOfLife(elem, options){
 				btn_clear.className = 'btn btn-danger';
 				btn_reset.className = 'btn btn-danger';
 				select_preset.className = 'form-control';
+				select_component.className = 'form-control';
+				btn_select_component.className = 'btn btn-success';
 
 			$(elem).html(main_div);
+			
+			//Initialize
 
 	  		//random_state();
-	  		render_snap();
+	  		render_state();
+	  		load_available_components();
 		}
 		
 		elem.gameoflife = new ConwayController();
