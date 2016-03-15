@@ -1,26 +1,156 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Gameoflife by jungkumseok</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Gameoflife</h1>
+      <h2 class="project-tagline">John Conway&#39;s famous Game of Life made into a Plug-and-Play widget</h2>
+      <a href="https://github.com/jungkumseok/gameoflife" class="btn">View on GitHub</a>
+      <a href="https://github.com/jungkumseok/gameoflife/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jungkumseok/gameoflife/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+    <section class="main-content">
+      <h1>
+<a id="conways-game-of-life" class="anchor" href="#conways-game-of-life" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conway's Game of Life</h1>
 
-  <title>Conway's Game of Life - jungkumseok.com</title>
-  <meta name="description" content="jks">
-  <meta name="author" content="jks">
-  <meta name="author" content="jungkumseok">
+<blockquote>
+<p>The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.
+The "game" is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input.
+One interacts with the Game of Life by creating an initial configuration and observing how it evolves or, for advanced players, by creating patterns with particular properties.
+...<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Read more in Wikipedia</a></p>
+</blockquote>
 
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
-  
-  <script src="https://code.jquery.com/jquery-2.2.1.min.js" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  
-  <script src="https://cdn.rawgit.com/jungkumseok/gameoflife/master/gameoflife/src/conwaygameoflife.js"></script>
-</head>
+<p>Check out the demo <a href="http://jungkumseok.github.io/gameoflife">HERE</a></p>
 
-<body>
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>Insert the dependencies in the html</p>
+
+<ul>
+<li>jQuery, Bootstrap, Font Awesome</li>
+</ul>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">head</span>&gt;
+  ...
+
+  &lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">crossorigin</span>=<span class="pl-s"><span class="pl-pds">"</span>anonymous<span class="pl-pds">"</span></span>&gt;
+  &lt;<span class="pl-ent">link</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css<span class="pl-pds">"</span></span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">crossorigin</span>=<span class="pl-s"><span class="pl-pds">"</span>anonymous<span class="pl-pds">"</span></span>&gt;
+
+<span class="pl-s1">  &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://code.jquery.com/jquery-2.2.1.min.js<span class="pl-pds">"</span></span> <span class="pl-e">crossorigin</span>=<span class="pl-s"><span class="pl-pds">"</span>anonymous<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">  &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js<span class="pl-pds">"</span></span> <span class="pl-e">crossorigin</span>=<span class="pl-s"><span class="pl-pds">"</span>anonymous<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+
+  ...
+&lt;/<span class="pl-ent">head</span>&gt;</pre></div>
+
+<h2>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
+
+<p>Including this Game of Life widget is extremely simple.</p>
+
+<h3>
+<a id="step-1" class="anchor" href="#step-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 1</h3>
+
+<p>Include the gameoflife.js in the <em>head</em> of your html document</p>
+
+<div class="highlight highlight-text-html-basic"><pre>
+&lt;<span class="pl-ent">head</span>&gt;
+  ...
+<span class="pl-s1">  &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://cdn.rawgit.com/jungkumseok/gameoflife/master/gameoflife/src/conwaygameoflife.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+
+&lt;/<span class="pl-ent">head</span>&gt;
+</pre></div>
+
+<h3>
+<a id="step-2" class="anchor" href="#step-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 2</h3>
+
+<p>You can load the Game of Life using any of the following methods:</p>
+
+<h4>
+<a id="method-1a-recommended--using--tag" class="anchor" href="#method-1a-recommended--using--tag" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Method 1a (Recommended) : using  tag</h4>
+
+<p>In your html, use the  tag </p>
+
+<div class="highlight highlight-text-html-basic"><pre>
+&lt;<span class="pl-ent">body</span>&gt;
+    &lt;<span class="pl-ent">game</span><span class="pl-e">-of-life</span>&gt;&lt;/<span class="pl-ent">game</span><span class="pl-e">-of-life</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;
+</pre></div>
+
+<h4>
+<a id="method-1b--using-css-class" class="anchor" href="#method-1b--using-css-class" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Method 1b : using CSS class</h4>
+
+<p>On your div element, use the css class <em>'game-of-life'</em> </p>
+
+<div class="highlight highlight-text-html-basic"><pre>
+&lt;<span class="pl-ent">body</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">'</span>game-of-life<span class="pl-pds">'</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;
+</pre></div>
+
+<h4>
+<a id="method-2--jquery-method" class="anchor" href="#method-2--jquery-method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Method 2 : jQuery method</h4>
+
+<p>In your Javascript, use the jQuery method <em>$(element).GameOfLife()</em></p>
+
+<div class="highlight highlight-text-html-basic"><pre>
+&lt;<span class="pl-ent">body</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">'</span>my_container<span class="pl-pds">'</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">        <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>#my_container<span class="pl-pds">'</span></span>).<span class="pl-en">GameOfLife</span>();</span>
+<span class="pl-s1">    &lt;/<span class="pl-ent">script</span>&gt;</span>
+&lt;/<span class="pl-ent">body</span>&gt;
+</pre></div>
+
+<h4>
+<a id="method-3--pure-javascript" class="anchor" href="#method-3--pure-javascript" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Method 3 : pure javascript</h4>
+
+<p>In your Javascript, use the <em>bindGameOfLife()</em> method</p>
+
+<div class="highlight highlight-text-html-basic"><pre>
+&lt;<span class="pl-ent">body</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">'</span>my_container<span class="pl-pds">'</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">        <span class="pl-k">var</span> container <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>my_container<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">             <span class="pl-en">bindGameOfLife</span>(container);</span>
+<span class="pl-s1">    &lt;/<span class="pl-ent">script</span>&gt;</span>
+&lt;/<span class="pl-ent">body</span>&gt;
+</pre></div>
+
+<h3>
+<a id="step-3" class="anchor" href="#step-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 3</h3>
+
+<p>Enjoy :)</p>
+
+<h2>
+<a id="future-update-plans" class="anchor" href="#future-update-plans" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Future Update Plans</h2>
+
+<ol>
+<li>Build Dynamic Preset Loader (data storage needed - possibly firebase)</li>
+<li>Build Dynamic "Component" Loader (data storage needed - possibly firebase)</li>
+<li>Modify 'zoom' behavior so that it does not clear the cells</li>
+<li>Add drag &amp; select behavior for the cells</li>
+</ol>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jungkumseok/gameoflife">Gameoflife</a> is maintained by <a href="https://github.com/jungkumseok">jungkumseok</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
   
-  <game-of-life></game-of-life>
-  
-</body>
+  </body>
 </html>
